@@ -25,18 +25,16 @@ test('renders score and time', async ({ page }) => {
 test('bug is visible on screen', async ({ page }) => {
   await page.goto('/');
 
-  const bug = page.locator('text=🐛');
+  const bug = page.locator('[data-testid="bug"]');
   await expect(bug).toBeVisible();
 });
 
 test('score increases when bug is clicked', async ({ page }) => {
   await page.goto('/');
 
-  const bug = page.locator('text=🐛');
+  const bug = page.locator('[data-testid="bug"]');
 
-  // Click the bug
   await bug.click();
 
-  // Expect score to update
   await expect(page.locator('text=Score: 1')).toBeVisible();
 });

@@ -61,6 +61,7 @@ function App() {
       <div className="game-area">
         {!gameOver && (
           <div
+            data-testid="bug"
             className="bug"
             style={{
               top: `${bugPosition.y}%`,
