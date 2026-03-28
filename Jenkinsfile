@@ -94,7 +94,7 @@ pipeline {
                 }
             }
             environment {
-                CI_ENVIRONMENT_URL = 'https://dynamic-wisp-87336c.netlify.app'
+                CI_ENVIRONMENT_URL = 'https://catchthatbug.netlify.app'
             }
             steps {
                 sh '''
