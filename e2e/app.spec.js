@@ -1,27 +1,42 @@
 // @ts-check
 const { test, expect } = require('@playwright/test');
 
-test('has title', async ({ page }) => {
+test('has correct title', async ({ page }) => {
   await page.goto('/');
 
-  // Expect a title "to contain" a substring.
-  await expect(page).toHaveTitle(/Learn Jenkins/);
+  // Update your index.html title accordingly if needed
+  await expect(page).toHaveTitle(/Catch the Bug/i);
 });
 
-test('has Jenkins in the body', async ({ page }) => {
+test('renders game title', async ({ page }) => {
   await page.goto('/');
 
-  const isVisible = await page.locator('a:has-text("Learn Jenkins on Udemy")').isVisible();
-  expect(isVisible).toBeTruthy();
+  const title = page.locator('text=Catch the Bug');
+  await expect(title).toBeVisible();
 });
 
-test('has expected app version', async ({ page }) => {
+test('renders score and time', async ({ page }) => {
   await page.goto('/');
 
-  const expectedAppVersion = process.env.REACT_APP_VERSION ? process.env.REACT_APP_VERSION : '1';
+  await expect(page.locator('text=Score:')).toBeVisible();
+  await expect(page.locator('text=Time:')).toBeVisible();
+});
 
-  console.log(expectedAppVersion);
+test('bug is visible on screen', async ({ page }) => {
+  await page.goto('/');
 
-  const isVisible = await page.locator(`p:has-text("Application version: ${expectedAppVersion}")`).isVisible();
-  expect(isVisible).toBeTruthy();
+  const bug = page.locator('text=🐛');
+  await expect(bug).toBeVisible();
+});
+
+test('score increases when bug is clicked', async ({ page }) => {
+  await page.goto('/');
+
+  const bug = page.locator('text=🐛');
+
+  // Click the bug
+  await bug.click();
+
+  // Expect score to update
+  await expect(page.locator('text=Score: 1')).toBeVisible();
 });
