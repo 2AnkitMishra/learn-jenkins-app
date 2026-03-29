@@ -32,7 +32,7 @@ function App() {
   useEffect(() => {
     if (gameOver) return;
 
-    const interval = setInterval(moveBug, 800);
+    const interval = setInterval(moveBug, 600);
     return () => clearInterval(interval);
   }, [gameOver]);
 
@@ -81,6 +81,9 @@ function App() {
           </div>
         )}
       </div>
+      <p data-testid="app-version">
+        Version: {process.env.REACT_APP_VERSION || "1.0.0"}
+      </p>
     </div>
   );
 }

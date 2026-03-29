@@ -38,3 +38,13 @@ test('score increases when bug is clicked', async ({ page }) => {
 
   await expect(page.locator('text=Score: 1')).toBeVisible();
 });
+
+test('app version is correct', async ({ page }) => {
+  await page.goto('/');
+
+  const expectedVersion = process.env.REACT_APP_VERSION || '1.0.0';
+
+  const versionElement = page.locator('[data-testid="app-version"]');
+
+  await expect(versionElement).toHaveText(`Version: ${expectedVersion}`);
+});
