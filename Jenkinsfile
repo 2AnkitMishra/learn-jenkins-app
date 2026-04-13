@@ -8,20 +8,15 @@ pipeline {
 
     stages {
         stage('Docker') {
-            agent {
-                docker {
-                    image 'docker:24.0.5-cli'
-                    args '-v /var/run/docker.sock:/var/run/docker.sock'
-                }
-            }
             steps {
                 sh '''
                     docker version
+                    docker ps
                     docker build -t my-playwright .
                 '''
             }
         }
-        
+
         stage('Build') {
             agent {
                 docker {
