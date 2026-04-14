@@ -86,22 +86,41 @@ pipeline {
                     reuseNode true
                 }
             }
-            environment {
-                CI_ENVIRONMENT_URL = "STAGING_URL_TO_BE_SET"
-            }
             steps {
                 sh '''
+                    set -e
+
                     netlify --version
-                    echo "Deploying to staging Site ID : $NETLIFY_SITE_ID"
-                    netlify status
-                    netlify deploy --dir=build --json > staging-deploy-output.json
-                    CI_ENVIRONMENT_URL=$(jq -r '.deploy_url' staging-deploy-output.json)
-                    npx playwright test --reporter=html
+                    echo "Deploying to staging..."
+
+                    # IMPORTANT: non-interactive deploy
+                    netlify deploy \
+                    --dir=build \
+                    --site=$NETLIFY_SITE_ID \
+                    --auth=$NETLIFY_AUTH_TOKEN \
+                    --json > staging-deploy-output.json
+
+                    # extract URL
+                    export CI_ENVIRONMENT_URL=$(jq -r '.deploy_url' staging-deploy-output.json)
+                    echo "Staging URL: $CI_ENVIRONMENT_URL"
+
+                    # run tests against deployed URL
+                    npx playwright test \
+                    --base-url=$CI_ENVIRONMENT_URL \
+                    --reporter=html \
+                    --workers=1 \
+                    --timeout=60000
                 '''
             }
             post {
                 always {
-                    publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, icon: '', keepAll: false, reportDir: 'playwright-report', reportFiles: 'index.html', reportName: 'Playwright E2E staging', reportTitles: '', useWrapperFileDirectly: true])
+                    publishHTML([
+                        allowMissing: false,
+                        keepAll: false,
+                        reportDir: 'playwright-report',
+                        reportFiles: 'index.html',
+                        reportName: 'Playwright E2E staging'
+                    ])
                 }
             }
         }
