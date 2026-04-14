@@ -17,16 +17,6 @@ pipeline {
                 git branch: 'main', url: 'https://github.com/2AnkitMishra/learn-jenkins-app.git'
             }
         }
-        stage('Docker') {
-            steps {
-                sh '''
-                    docker version
-                    docker ps
-                    ls -a
-                    docker build -t my-playwright .
-                '''
-            }
-        }
 
         stage('Build') {
             agent {
