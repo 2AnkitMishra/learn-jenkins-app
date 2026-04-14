@@ -4,7 +4,7 @@ WORKDIR /app
 
 # Install global tools
 RUN npm cache clean --force && \
-    npm install -g netlify-cli@20.1.1 node-jq
+    npm install -g netlify-cli@20.1.1 node-jq serve
 
 # Copy project files
 COPY . .
