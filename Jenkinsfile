@@ -30,7 +30,8 @@ pipeline {
                 // some block
                 sh '''
                     aws --version   
-                    aws s3 ls           
+                    echo "Hello S3! from Jenkins" > index.html
+                    aws s3 cp index.html s3://catch-that-bug/index.html
                 '''
                 }
             }
